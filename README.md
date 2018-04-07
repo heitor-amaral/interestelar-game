@@ -1,5 +1,4 @@
 # TP1
-#
-#
-#Instruções para compilar:
+
+Instruções para compilar:
 #   make run
