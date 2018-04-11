@@ -208,7 +208,7 @@ void desenhaBasePouso()
 
 void desenhaNave()
 {
-
+    glColor3f(1,1,1);
    // glClear(GL_COLOR_BUFFER_BIT);
 	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
@@ -336,8 +336,8 @@ void atualiza()
 		if(nave.motor == 1.0)
 		{
 			nave.posicaoY += nave.velocidadeEmY;
-            nave.posicaoX += nave.velocidadeEmX;
-        }
+      nave.posicaoX += nave.velocidadeEmX;
+    }
 
 		else
 		{
@@ -345,11 +345,10 @@ void atualiza()
 			nave.posicaoX += nave.velocidadeEmX;
 		}
 
-
 		nave.velocidadeEmY += nave.gravidade;
 
-        basePouso();
-	    chao();
+    basePouso();
+	  chao();
 
 		if(nave.angulo == 360 || nave.angulo == -360) //Reseta o angulo
 		{
@@ -378,8 +377,8 @@ void inicializa(void)
   nave.gravidade = -0.01;
   nave.velocidadeEmY = 0;
   nave.velocidadeEmX = 0;
-  nave.aceleracaoX = 0.05;
-  nave.aceleracaoY = 0.05;
+  nave.aceleracaoX = 0;
+  nave.aceleracaoY = nave.gravidade;
   nave.angulo = 0;
   nave.motor = 0;
   nave.combustivel = 1000;
@@ -419,9 +418,6 @@ glMatrixMode(GL_PROJECTION);
 void teclado(unsigned char key, int x, int y)
 {
 
-    if(key!='w' || key !='W')
-        nave.motor=0;
-
     switch(key)
     {
       // Tecla ESC
@@ -444,9 +440,11 @@ void teclado(unsigned char key, int x, int y)
       	{
       		if(nave.combustivel>0)
       		{
-	      		nave.motor = 1.0;
-	      		nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
-	      		nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
+            nave.motor = 1.0;
+            nave.aceleracaoX = 0.05 * sin(-(nave.angulo * M_PI) / 180);
+            nave.aceleracaoY = 0.05 * cos((nave.angulo * M_PI) / 180);
+	      		nave.velocidadeEmY += nave.aceleracaoY;
+            nave.velocidadeEmX += nave.aceleracaoX;
 	      		nave.combustivel--;
       		}
       		
@@ -553,6 +551,24 @@ void teclado(unsigned char key, int x, int y)
    }
 }
 
+void tecladoUP(unsigned char key, int x, int y)
+{
+  switch (key)
+  {
+    case 'w':
+    case 'W':
+      if(estado == jogo)
+      {
+        nave.aceleracaoX = 0;
+        nave.aceleracaoY = nave.gravidade;
+        nave.motor = 0;
+      }
+      
+    break;
+
+  }
+}
+
 void teclasEspeciais(int key, int x, int y)
 {
   switch (key)
@@ -617,6 +633,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(desenhaCena);
     glutReshapeFunc(redimensiona);
     glutKeyboardFunc(teclado);
+    glutKeyboardUpFunc(tecladoUP);
     glutSpecialFunc(teclasEspeciais);
     inicializa();
 

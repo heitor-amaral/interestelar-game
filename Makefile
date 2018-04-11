@@ -13,7 +13,7 @@ $(SRC)%.o: $(SRC)%.c
 
 all: $(TODOS_ARQUIVOS_OBJ)
 	@echo "Compilando o jogo.."
-	@gcc -o start.exe $(TODOS_ARQUIVOS_OBJ) $(OPCOES_COMPILADOR)
+	@gcc -o start $(TODOS_ARQUIVOS_OBJ) $(OPCOES_COMPILADOR)
 
 run: all
 	@echo "Inciando.."
