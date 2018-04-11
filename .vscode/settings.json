@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "texturas.h": "c",
+        "stdio.h": "c",
+        "texto.h": "c"
+    }
+}

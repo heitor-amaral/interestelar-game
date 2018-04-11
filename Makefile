@@ -1,7 +1,7 @@
 OPCOES_COMPILADOR=-I./lib -lglut -lGLU -lSOIL -lGLEW -lGL -lm
 LIB=./lib/
 SRC=./src/
-TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o
+TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o $(LIB)texturas.o
 
 $(LIB)%.o: $(LIB)%.c
 	@echo "Compilando as bibliotecas.."
