@@ -8,18 +8,20 @@ $(LIB)%.o: $(LIB)%.c
 	@gcc -o $@ -c $< $(OPCOES_COMPILADOR)
 
 $(SRC)%.o: $(SRC)%.c
-	@echo "Compilando o jogo.."
+	@echo "Compilando componentes do jogo.."
 	@gcc -o $@ -c $< $(OPCOES_COMPILADOR)
 
 all: $(TODOS_ARQUIVOS_OBJ)
+	@echo "Compilando o jogo.."
 	@gcc -o start.exe $(TODOS_ARQUIVOS_OBJ) $(OPCOES_COMPILADOR)
 
 run: all
-	@./start.exe
+	@echo "Inciando.."
+	@./start
 	
 clean:
 	@echo "Limpando arquivos.."
-	@rm -f start.exe
+	@rm -f start
 	@rm -f *.o
 	@rm -f ./src/*.o
 	@rm -f ./lib/*.o
