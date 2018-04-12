@@ -2,6 +2,12 @@
     "files.associations": {
         "texturas.h": "c",
         "stdio.h": "c",
-        "texto.h": "c"
-    }
+        "texto.h": "c",
+        "math.h": "c",
+        "stdlib.h": "c",
+        "freeglut.h": "c",
+        "config.h": "c",
+        "desenha.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

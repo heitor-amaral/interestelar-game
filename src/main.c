@@ -48,8 +48,8 @@ void resetaJogo() //Usa o preset da atualiza
   nave.gravidade = -0.01;
   nave.velocidadeEmY = 0;
   nave.velocidadeEmX = 0;
-  nave.aceleracaoX = 0.05;
-  nave.aceleracaoY = 0.05;
+  nave.aceleracaoX = 0;
+  nave.aceleracaoY = 0;
   nave.angulo = 0;
   nave.motor = 0.0;
   nave.combustivel = 1000;
@@ -68,12 +68,12 @@ void desenhaHUD()
     escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.posicaoY, 1000, 900);
 
     escreveTexto(GLUT_BITMAP_HELVETICA_18, "ACELERACAO EM X", 700, 850); //ACELERACAO EM X
-    escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.aceleracaoX, 1000, 850);
+    escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.aceleracaoX * sin((-nave.angulo * M_PI) / 180) , 1000, 850);
 
     escreveTexto(GLUT_BITMAP_HELVETICA_18, "ACELERACAO EM Y", 700, 800); //ACELERACAO EM X
-    escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.aceleracaoY, 1000, 800);
+    escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.aceleracaoY * cos((nave.angulo * M_PI) / 180) + nave.gravidade, 1000, 800);
 
-	escreveTexto(GLUT_BITMAP_HELVETICA_18, "ANGULO", 700, 750); //ANGULO DA NAVE
+  	escreveTexto(GLUT_BITMAP_HELVETICA_18, "ANGULO", 700, 750); //ANGULO DA NAVE
     escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.angulo, 1000, 750);
 
     escreveTexto(GLUT_BITMAP_HELVETICA_18, "FUEL", 700, 700); //COMBUSTIVEL
@@ -378,7 +378,7 @@ void inicializa(void)
   nave.velocidadeEmY = 0;
   nave.velocidadeEmX = 0;
   nave.aceleracaoX = 0;
-  nave.aceleracaoY = nave.gravidade;
+  nave.aceleracaoY = 0;
   nave.angulo = 0;
   nave.motor = 0;
   nave.combustivel = 1000;
@@ -441,11 +441,11 @@ void teclado(unsigned char key, int x, int y)
       		if(nave.combustivel>0)
       		{
             nave.motor = 1.0;
-            nave.aceleracaoX = 0.05 * sin(-(nave.angulo * M_PI) / 180);
-            nave.aceleracaoY = 0.05 * cos((nave.angulo * M_PI) / 180);
-	      		nave.velocidadeEmY += nave.aceleracaoY;
-            nave.velocidadeEmX += nave.aceleracaoX;
-	      		nave.combustivel--;
+            nave.aceleracaoY = 0.1;
+            nave.aceleracaoX = 0.1;
+	      		nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
+            nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
+	      		nave.combustivel--; 
       		}
       		
       	}
@@ -559,8 +559,8 @@ void tecladoUP(unsigned char key, int x, int y)
     case 'W':
       if(estado == jogo)
       {
+        nave.aceleracaoY = 0;
         nave.aceleracaoX = 0;
-        nave.aceleracaoY = nave.gravidade;
         nave.motor = 0;
       }
       
@@ -580,9 +580,11 @@ void teclasEspeciais(int key, int x, int y)
       		if(nave.combustivel>0)
       		{
 	      		nave.motor = 1.0;
+            nave.aceleracaoY = 0.1;
+            nave.aceleracaoX = 0.1;
 	      		nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
-	      		nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
-	      		nave.combustivel--;
+            nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
+	      		nave.combustivel--; 
       		}
       	}
       }
