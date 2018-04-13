@@ -334,60 +334,60 @@ void chao()
 void atualiza()
 {
   
-  if(estado == inicio)
-  {
+  // if(estado == inicio)
+  // {
 
-    if(tecla[13]==1)
-      estado = jogo;
+  //   if(tecla[13]==1)
+  //     estado = jogo;
       
-  }
+  // }
 
-  if(estado == pause)
-  {
-    if(tecla[13]==1)
-      estado = jogo;
-  }
+  // if(estado == pause)
+  // {
+  //   if(tecla[13]==1)
+  //     estado = jogo;
+  // }
 
-  if(estado == vitoria)
-  {
+  // if(estado == vitoria)
+  // {
 
-    if(tecla['s']==1)
-      resetaJogo();
+  //   if(tecla['s']==1)
+  //     resetaJogo();
     
-    if(tecla['n']==1)
-      exit(0);
-  }
+  //   if(tecla['n']==1)
+  //     exit(0);
+  // }
 
-  if(estado == reset)
-  {
+  // if(estado == reset)
+  // {
 
-    if(tecla['s'])
-      resetaJogo();
+  //   if(tecla['s'])
+  //     resetaJogo();
 
-    if(tecla['n'])
-      estado = jogo;
-  }
+  //   if(tecla['n'])
+  //     estado = jogo;
+  // }
 
-  if(estado == sair)
-  {
+  // if(estado == sair)
+  // {
 
-    if(tecla['s']==1)
-      exit(0);
+  //   if(tecla['s']==1)
+  //     exit(0);
     
-    if(tecla['n']==1)
-      estado = jogo;
-  }
+  //   if(tecla['n']==1)
+  //     estado = jogo;
+  // }
   
-  if(estado == Derrota)
-  {
+  // if(estado == Derrota)
+  // {
 
-    if(tecla['r'])
-      resetaJogo();
-      estado = jogo;
+  //   if(tecla['r'])
+  //     resetaJogo();
+  //     estado = jogo;
 
-    if(tecla[27])
-      exit(0);
-  }
+  //   if(tecla[27])
+  //     exit(0);
+  // }
 
 	if(estado == jogo)
 	{
@@ -433,14 +433,14 @@ void atualiza()
 			nave.angulo = 0;
 		}
 
-    if(tecla['p']==1)
-      estado = pause;
+    // if(tecla['p']==1)
+    //   estado = pause;
 
-    if(tecla['r']==1)
-      estado = reset;
+    // if(tecla['r']==1)
+    //   estado = reset;
 
-    if(tecla[27]) // ESC
-      estado = sair;
+    // if(tecla[27]) // ESC
+    //   estado = sair;
 	}
 
 		glutPostRedisplay();
@@ -506,157 +506,111 @@ void teclado(unsigned char key, int x, int y)
 {
 
   tecla[key] = 1;
-  //   switch(key)
-  //   {
-  //     // Tecla ESC
-  //     case 27:
 
-  //     	 if(estado == Derrota)
-  //     	 {
-  //     	 	exit(0);
-  //     	 }
 
-  //     	 if(estado == jogo)
-  //     	 {
-  //        estado = sair;
-  //     	 }
-  //        break;
+  switch(key)
+  {
+    
+    case 27: // Tecla ESC
 
-  //     case 'w':
-  //     case 'W':
-  //     	if(estado == jogo)
-  //     	{
-  //     		if(nave.combustivel>0)
-  //     		{
-  //           nave.motor = 1.0;
-  //           nave.aceleracaoY = 0.1;
-  //           nave.aceleracaoX = 0.1;
-	//       		nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
-  //           nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
-	//       		nave.combustivel--; 
-  //     		}
-      		
-  //     	}
-  //     break;
+      if(estado == Derrota)
+      {
+        exit(0);
+      }
 
-  //     case 'd':
-  //     case 'D':
-  //     if(estado == jogo)
-  //     {
-  //     	nave.angulo-=1;
-  //     }
-  //     break;
+      if(estado == jogo)
+      {
+        estado = sair;
+      }
+    break;
 
-  //     case 'a':
-  //     case 'A':
-  //     if(estado == jogo)
-  //     {
-  //     	nave.angulo+=1;
-  //     }
-  //     break;
 
-  //     case 'p':
-  //     case 'P':
-  //     	if(estado == jogo)
-  //     	{
-  //     		estado = pause;
-  //     	}
+    case 'p':
+    case 'P':
+      if(estado == jogo)
+      {
+        estado = pause;
+      }
 
-  //       else if(estado == pause)
-  //     	{
-  //     		estado = jogo;
-  //     	}
+      else if(estado == pause)
+      {
+        estado = jogo;
+      }
+    break;
+    
+    case 13: //ENTER
+      if(estado == inicio)
+      {
+          estado = jogo;
+      }
+      break;
 
-  //     break;
+    case 's':
+    case 'S':
+    
+      if(estado == sair)
+      {
+        exit(0);
+      }
 
-  //     case 13: //ENTER
-  //     if(estado == inicio)
-  //     {
-  //       estado = jogo;
-  //     }
-  //     break;
+      if(estado == reset)
+      {
+        resetaJogo();
+        estado = jogo;
+      }
+    
+      if(estado == vitoria)
+      {
+          resetaJogo();
+          estado = jogo;
+      }
+    
+    break;
+      
+    case 'n':
+    case 'N':
+      
+        if(estado == sair)
+        {
+          estado = jogo;
+        }
 
-  //     case 's':
-  //     case 'S':
-  //     {
-  //     	if(estado == sair)
-  //     	{
-  //     		exit(0);
-  //     	}
-
-  //       if(estado == reset)
-  //       {
-  //         resetaJogo();
-  //         estado = jogo;
-  //       }
-
-  //       if(estado == vitoria)
-  //       {
-  //         resetaJogo();
-  //         estado = jogo;
-  //       }
-  //     }
-  //     break;
-
-  //     case 'n':
-  //     case 'N':
-  //     {
-  //     	if(estado == sair)
-  //     	{
-  //     		estado = jogo;
-  //     	}
-
-  //       if(estado == reset)
-  //       {
-  //         estado = jogo;
-  //       }
-
-  //       if(estado == vitoria)
-  //       {
-  //         exit(0);
-  //       }
-  //     }
-  //     break;
-
-  //     case 'r':
-  //     case 'R':
-  //     {
-  //       if(estado == jogo)
-  //       {
-  //         estado = reset;
-  //       }
-
-  //       if(estado == Derrota)
-  //       {
-  //         resetaJogo();
-  //         estado = jogo;
-  //       }
-  //     }
-  //     break;
-
-  //     default:
-  //        break;
-  //  }
+        if(estado == reset)
+        {
+            estado = jogo;
+        }
+    
+        if(estado == vitoria)
+        {
+          exit(0);
+        }
+      
+      break;
+      
+      case 'r':
+      case 'R':
+      
+        if(estado == jogo)
+        {
+          estado = reset;
+        }
+      
+        if(estado == Derrota)
+        {
+            resetaJogo();
+            estado = jogo;
+        }
+      
+      break;
+        
+      default:
+          break;
+    }
 }
-
+            
 void tecladoUP(unsigned char key, int x, int y)
 {
-
   tecla[key] = 0;
-  // switch (key)
-  // {
-  //   case 'w':
-  //   case 'W':
-  //     if(estado == jogo)
-  //     {
-  //       nave.aceleracaoY = 0;
-  //       nave.aceleracaoX = 0;
-  //       nave.motor = 0;
-  //     }
-      
-  //   break;
-
-  // }
 }
 
 void teclasEspeciais(int key, int x, int y)
