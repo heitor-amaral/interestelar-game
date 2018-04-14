@@ -1,7 +1,7 @@
 OPCOES_COMPILADOR=-I./lib -lglut -lGLU -lSOIL -lGLEW -lGL -lm
 LIB=./lib/
 SRC=./src/
-TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o $(LIB)texturas.o
+TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o $(LIB)texturas.o $(LIB)pontuacao.o
 
 $(LIB)%.o: $(LIB)%.c
 	@echo "Compilando as bibliotecas.."
@@ -13,6 +13,7 @@ $(SRC)%.o: $(SRC)%.c
 
 all: $(TODOS_ARQUIVOS_OBJ)
 	@echo "Compilando o jogo.."
+	@chmod 777 pontuacoes.txt
 	@gcc -o start $(TODOS_ARQUIVOS_OBJ) $(OPCOES_COMPILADOR)
 
 run: all
