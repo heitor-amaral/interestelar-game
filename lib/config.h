@@ -17,12 +17,15 @@
     #define Derrota 5
     #define reset 6
     #define vitoria 7
+    #define menu 8
+    #define controles 9
+    #define creditos 10
     int xAleatorioBasePouso; //Posição aleatoria da base de pouso
     //VARIAVEIS DE ESTADO
 
 
     //ESTRUTURA DA NAVE
-    typedef struct navinha 
+    typedef struct navinha
     {
         float velocidadeEmY;
         float velocidadeEmX;
@@ -36,5 +39,11 @@
         int combustivel;
     } navinha;
     //ESTRUTURA DA NAVE
+
+    typedef struct Mouse
+    {
+      float x;
+      float y;
+    } Mouse;
 
 #endif

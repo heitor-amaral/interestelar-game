@@ -8,7 +8,14 @@
     int texturaDerrota;
     int texturaReset;
     int texturaVitoria;
-    int texturaFundoJogo;
+    int texturaFundoJogo01;
+    int texturaFundoJogo02;
+    int texturaBasePouso;
+    int menu_sem_escrita;
+    int SpriteSheet_Menu;
+    int texturaControles;
+    int texturaPressSpacebarToContinue;
+    int texturaCreditos;
 
     void carregaTextura();
 
