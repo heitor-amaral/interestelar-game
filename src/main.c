@@ -38,6 +38,7 @@
 #include <config.h>
 #include <texto.h>
 #include <texturas.h>
+#include <pontuacao.h>
 
 //COLOCAR NO LUGAR CERTO
 float transparencia = 1; // inicio
@@ -56,6 +57,8 @@ Mouse posicaoMouse;
 
 unsigned int tecla[256];
 unsigned int teclaEspec[256];
+
+int melhoresPontuacoes[5];
 
 void resetaJogo() //Usa o preset da atualiza
 {
@@ -215,6 +218,53 @@ void desenhaVitoria()
     quadradoDoTamanhoDaTela();
 
     glDisable(GL_TEXTURE_2D);
+
+
+    //glColor3f(0.27,0.27,0.53);
+
+    glColor4f(0,0,0,0.8);
+
+    glBegin(GL_TRIANGLE_FAN);
+
+      glVertex2f((LARGURA_DO_MUNDO/2)-180, (ALTURA_DO_MUNDO/2)-90);
+      glVertex2f((LARGURA_DO_MUNDO/2)+170, (ALTURA_DO_MUNDO/2)-90);
+      glVertex2f((LARGURA_DO_MUNDO/2)+170, (ALTURA_DO_MUNDO/2)+50);
+      glVertex2f((LARGURA_DO_MUNDO/2)-180, (ALTURA_DO_MUNDO/2)+50);
+    
+    glEnd();
+            
+    glColor3f(1,0.1,0.1);
+    //rgb(179, 57, 57)
+
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "PONTUACAO", (LARGURA_DO_MUNDO/2)-100, ALTURA_DO_MUNDO/2); // velocidade em Y
+    escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, nave.combustivel, (LARGURA_DO_MUNDO/2)-40, (ALTURA_DO_MUNDO/2)-70);
+
+
+    glColor4f(0,0,0,0.8);
+
+    glBegin(GL_TRIANGLE_FAN);
+
+      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-500);
+      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-500);
+      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-150);
+      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-150);
+    
+    glEnd();
+
+    glColor3f(1,0.1,0.1);
+
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // velocidade em Y
+    escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[0], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-190);
+
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); // velocidade em Y
+    escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[1], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-240);
+
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); // velocidade em Y
+    escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[2], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-290);
+
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); // velocidade em Y
+    escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[3], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-340);
+
 }
 
 void desenhaFundoJogo()
@@ -452,6 +502,11 @@ void basePouso()
 				nave.aceleracaoX = 0;
 
         estado = vitoria;
+
+        melhoresPontuacoes[4] = nave.combustivel;
+
+        salvaPontuacao(melhoresPontuacoes);
+
 			}
 	}
 
@@ -883,6 +938,8 @@ void ClicMouse(int button, int state, int x, int y)
 
 int main(int argc, char **argv)
 {
+    carregaPontuacao(melhoresPontuacoes);
+
     // Acordando o GLUT
     glutInit(&argc, argv);
 
