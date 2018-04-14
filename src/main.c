@@ -40,6 +40,7 @@
 navinha nave;
 
 unsigned int tecla[256];
+unsigned int teclaEspec[256];
 
 void resetaJogo() //Usa o preset da atualiza
 {
@@ -81,8 +82,8 @@ void desenhaHUD()
     escreveTexto(GLUT_BITMAP_HELVETICA_18, "FUEL", 700, 700); //COMBUSTIVEL
     escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.combustivel, 1000, 700);
 
-    escreveTexto(GLUT_BITMAP_HELVETICA_18, "MOTOR", 700, 650); //COMBUSTIVEL
-    escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.motor, 1000, 650);
+    // escreveTexto(GLUT_BITMAP_HELVETICA_18, "MOTOR", 700, 650); //COMBUSTIVEL
+    // escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.motor, 1000, 650);
 }
 
 void quadradoDoTamanhoDaTela()
@@ -333,70 +334,41 @@ void chao()
 
 void atualiza()
 {
-  
-  // if(estado == inicio)
-  // {
-
-  //   if(tecla[13]==1)
-  //     estado = jogo;
-      
-  // }
-
-  // if(estado == pause)
-  // {
-  //   if(tecla[13]==1)
-  //     estado = jogo;
-  // }
-
-  // if(estado == vitoria)
-  // {
-
-  //   if(tecla['s']==1)
-  //     resetaJogo();
-    
-  //   if(tecla['n']==1)
-  //     exit(0);
-  // }
-
-  // if(estado == reset)
-  // {
-
-  //   if(tecla['s'])
-  //     resetaJogo();
-
-  //   if(tecla['n'])
-  //     estado = jogo;
-  // }
-
-  // if(estado == sair)
-  // {
-
-  //   if(tecla['s']==1)
-  //     exit(0);
-    
-  //   if(tecla['n']==1)
-  //     estado = jogo;
-  // }
-  
-  // if(estado == Derrota)
-  // {
-
-  //   if(tecla['r'])
-  //     resetaJogo();
-  //     estado = jogo;
-
-  //   if(tecla[27])
-  //     exit(0);
-  // }
 
 	if(estado == jogo)
 	{
-    
+
+    // if(teclaEspec[GLUT_KEY_LEFT]==1)
+    //   nave.angulo+=1;
+
     if(tecla['a']==1)
       nave.angulo+=1;
 
+    // if(teclaEspec[GLUT_KEY_RIGHT]==1)
+    //   nave.angulo-=1;
+
     if(tecla['d']==1)
       nave.angulo-=1;
+
+    // if(teclaEspec[GLUT_KEY_UP])
+    // {
+    //    if(nave.combustivel>0)
+    //   {
+    //     nave.motor = 1;
+    //     nave.aceleracaoY = 0.03;
+    //     nave.aceleracaoX = 0.03;
+    //     nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
+    //     nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
+    //     nave.posicaoY += nave.velocidadeEmY;
+    //     nave.posicaoX += nave.velocidadeEmX;
+    //     nave.combustivel--; 
+    //   }
+    //   else
+    //   {
+    //     nave.posicaoY += nave.velocidadeEmY;
+    //     nave.posicaoX += nave.velocidadeEmX;
+    //   }
+    // }
 
 		if(tecla['w']==1)
 		{
@@ -411,7 +383,21 @@ void atualiza()
         nave.posicaoX += nave.velocidadeEmX;
         nave.combustivel--; 
       }
+      else
+      {
+        nave.posicaoY += nave.velocidadeEmY;
+        nave.posicaoX += nave.velocidadeEmX;
+      }
     }
+
+    // if(teclaEspec[GLUT_KEY_UP]==0)
+    // {
+    //   // nave.motor = 0;
+    //   nave.aceleracaoY = 0;
+    //   nave.aceleracaoX = 0;
+		// 	nave.posicaoY += nave.velocidadeEmY;
+		// 	nave.posicaoX += nave.velocidadeEmX;
+    // }
 
 		if(tecla['w']==0)
 		{
@@ -433,14 +419,6 @@ void atualiza()
 			nave.angulo = 0;
 		}
 
-    // if(tecla['p']==1)
-    //   estado = pause;
-
-    // if(tecla['r']==1)
-    //   estado = reset;
-
-    // if(tecla[27]) // ESC
-    //   estado = sair;
 	}
 
 		glutPostRedisplay();
@@ -468,7 +446,7 @@ void inicializa(void)
   nave.aceleracaoY = 0;
   nave.angulo = 0;
   nave.motor = 0;
-  nave.combustivel = 1000;
+  nave.combustivel = 500;
 }
 
 // Callback de redimensionamento
@@ -604,7 +582,7 @@ void teclado(unsigned char key, int x, int y)
       break;
         
       default:
-          break;
+        break;
     }
 }
             
@@ -613,49 +591,15 @@ void tecladoUP(unsigned char key, int x, int y)
   tecla[key] = 0;
 }
 
-void teclasEspeciais(int key, int x, int y)
-{
-  switch (key)
-  {
-      case GLUT_KEY_UP: //CIMA
-      {
-        if(estado == jogo)
-      	{
-      		if(nave.combustivel>0)
-      		{
-	      		nave.motor = 1.0;
-            nave.aceleracaoY = 0.1;
-            nave.aceleracaoX = 0.1;
-	      		nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
-            nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
-	      		nave.combustivel--; 
-      		}
-      	}
-      }
-      break;
+// void teclasEspeciais(int key, int x, int y)
+// {
+//   teclaEspec[key] = 1;
+// }
 
-      case GLUT_KEY_RIGHT: //DIREITA
-      {
-        if(estado == jogo)
-        {
-          nave.angulo-=1;
-        }
-      }
-      break;
-
-      case GLUT_KEY_LEFT: //ESQUERDA
-      {
-        if(estado == jogo)
-        {
-        	nave.angulo+=1;
-        }
-      }
-      break;
-
-      default:
-        break;
-  }
-}
+// void teclasEspeciaisUP(int key, int x, int y)
+// {
+//   teclaEspec[key] = 0;
+// }
 
 // Rotina principal
 int main(int argc, char **argv)
@@ -680,7 +624,9 @@ int main(int argc, char **argv)
     glutReshapeFunc(redimensiona);
     glutKeyboardFunc(teclado);
     glutKeyboardUpFunc(tecladoUP);
-    glutSpecialFunc(teclasEspeciais);
+    // glutSpecialFunc(teclasEspeciais);
+    // glutSpecialUpFunc(teclasEspeciaisUP);
+
     inicializa();
 
     glutTimerFunc(0, atualiza, 0);
