@@ -3,39 +3,58 @@
 #include <stdlib.h>
 
 
-void carregaPontuacao(int *melhoresPontucoes)
+void carregaPontuacao(int *score)
 {
 
-    FILE *filePontuacao = fopen("./pontuacao.txt", "r");
+    FILE *filePontuacao;
+    filePontuacao = fopen("pontuacoes.txt", "r");
 
     if(filePontuacao == NULL)
     {
         printf("Erro na abertura do arquivo!");
-        exit(0);
     }
-
-    int i;
-
-    for(i=0; i<10; i++)
+    else
     {
-        fscanf(filePontuacao, "%d\n", melhoresPontucoes[i]);
+        printf("Arquivo aberto com sucesso");
     }
+
+    fscanf(filePontuacao, "%i %i %i %i %i", score, score+1, score+2, score+3, score+4);
 
     fclose(filePontuacao);
 
 }
 
-void salvaPontuacao(int pontuacao)
+
+void salvaPontuacao(int *score)
 {
 
-    FILE *filePontuacao = fopen("./pontuacao.txt", "w");
+    int i, j, aux;
+    //Ordenação do maior pro menor
+    for(i=0; i<5; i++)
+    {
+        for(j=i+1; j<5; j++)
+        {
+            if(*(score+i) < *(score+j))
+            {
+                aux = *(score+i);
+                *(score+i) = *(score+j);
+                *(score+j) = aux;
+            }
+        }
+    }
+    //Ordenação do maior pro menor
+
+
+    FILE *filePontuacao = fopen("pontuacoes.txt", "w");
     if(filePontuacao == NULL)
     {
         printf("Erro na abertura do arquivo!");
         exit(0);
     }
 
-    fprintf(filePontuacao, "%d", pontuacao);
+
+    for(i=0; i<5; i++)
+        fprintf(filePontuacao, "%d ", *(score+i));
 
     fclose(filePontuacao);
 }
