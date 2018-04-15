@@ -20,6 +20,8 @@
     #define menu 8
     #define controles 9
     #define creditos 10
+    #define Score 11
+    #define pre 12
     int xAleatorioBasePouso; //Posição aleatoria da base de pouso
     //VARIAVEIS DE ESTADO
 

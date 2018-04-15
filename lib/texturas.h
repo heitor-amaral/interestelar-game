@@ -16,6 +16,19 @@
     int texturaControles;
     int texturaPressSpacebarToContinue;
     int texturaCreditos;
+    int texturaScore;
+
+    //ONE SWITCH
+    int texturaScoreOneSwitch;
+    int texturaCreditosOneSwitch;
+    int texturaControlesOneSwitch;
+    int texturaMenuOneSwitch;
+    int texturaDerrotaOneSwitch;
+    int SpriteDerrota;
+    int SpriteVitoria;
+    int texturaVitoriaOneSwitch;
+    int texturaPreJogo;
+    int SpritePreJogo;
 
     void carregaTextura();
 
