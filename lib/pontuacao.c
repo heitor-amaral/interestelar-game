@@ -13,10 +13,7 @@ void carregaPontuacao(int *score)
     {
         printf("Erro na abertura do arquivo!");
     }
-    else
-    {
-        printf("Arquivo aberto com sucesso");
-    }
+    
 
     fscanf(filePontuacao, "%i %i %i %i %i", score, score+1, score+2, score+3, score+4);
 
