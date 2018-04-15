@@ -713,6 +713,12 @@ void chao()
 	}
 }
 
+void limiteDoJogo()
+{
+  if(nave.posicaoX > LARGURA_DO_MUNDO || nave.posicaoX < 0 || nave.posicaoY > ALTURA_DO_MUNDO)
+    estado = Derrota;
+}
+
 void atualiza()
 {
 	if(estado == pre) //DECIDE SE ONE SWITCH OU NAO
@@ -823,6 +829,9 @@ void atualiza()
 
     if(estado == jogo)
     {  
+      
+      limiteDoJogo();
+
         if(oneSwitch == 0)
         {
 	        if(tecla['w']==0 && tecla['W']==0)
