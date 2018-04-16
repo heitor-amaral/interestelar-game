@@ -951,7 +951,7 @@ void redimensiona(int width, int height)
 
   larguraDaTela = width;
   alturaDaTela = height;
-
+  
   glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, LARGURA_DO_MUNDO, 0, ALTURA_DO_MUNDO, -1, 1);
@@ -963,7 +963,6 @@ void redimensiona(int width, int height)
         // vamos colocar barras verticais (acima e abaixo)
         float hViewport = width / razaoAspectoMundo;
         float yViewport = (height - hViewport)/2;
-
         glViewport(0, yViewport, width, hViewport);
     }
     // se a janela está mais larga (achatada) do que o mundo (16:9)...
@@ -1278,6 +1277,8 @@ void movimentoMouse(int x, int y)
     posicaoMouse.x = x;
     posicaoMouse.y = y;
 
+  if(oneSwitch == FALSE)
+  {
     if(estado == menu)
     {
       if(posicaoMouse.y > ((alturaDaTela/1.093)-17) && posicaoMouse.y < ((alturaDaTela/1.093)+17)) //Sair
@@ -1315,6 +1316,7 @@ void movimentoMouse(int x, int y)
         estadoMenu = jogar;
       }
     }
+  }
 }
 
 void ClicMouse(int button, int state, int x, int y)
@@ -1322,39 +1324,42 @@ void ClicMouse(int button, int state, int x, int y)
   posicaoMouse.x = x;
   posicaoMouse.y = y;
 
-  if(estado == menu)
+  if(oneSwitch == FALSE)
   {
-    if (button == GLUT_LEFT_BUTTON)
-      {
+    if(estado == menu)
+    {
+      if (button == GLUT_LEFT_BUTTON)
+        {
           if (state == GLUT_DOWN) //OBS: TIRAR NUMEROS MAGICOS
           {
-            if(posicaoMouse.y > ((alturaDaTela/1.093)-17) && posicaoMouse.y < ((alturaDaTela/1.093)+17)) //Sair nas coordenadas do mouse
-            {
-                exit(0);
-            }
+          if(posicaoMouse.y > ((alturaDaTela/1.093)-17) && posicaoMouse.y < ((alturaDaTela/1.093)+17)) //Sair nas coordenadas do mouse
+          {
+              exit(0);
+          }
 
-            if(posicaoMouse.y > ((alturaDaTela/1.17)-17) && posicaoMouse.y < ((alturaDaTela/1.17)+17)) //creditos nas coordenadas do mouse
-            {
-              estado = creditos;
-            }
+          if(posicaoMouse.y > ((alturaDaTela/1.17)-17) && posicaoMouse.y < ((alturaDaTela/1.17)+17)) //creditos nas coordenadas do mouse
+          {
+            estado = creditos;
+          }
 
-            if(posicaoMouse.y > ((alturaDaTela/1.254)-17) && ((alturaDaTela/1.254)+17)) //controles nas coordenadas do mouse
-            {
-              estado = controles;
-            }
+          if(posicaoMouse.y > ((alturaDaTela/1.254)-17) && posicaoMouse.y < ((alturaDaTela/1.254)+17)) //controles nas coordenadas do mouse
+          {
+            estado = controles;
+          }
 
-            if(posicaoMouse.y > ((alturaDaTela/1.35)-17) && posicaoMouse.y < ((alturaDaTela/1.35)+17)) //SCORE FUNCIONAR nas coordenadas do mouse
-            {
-              estado = Score;
-            }
+          if(posicaoMouse.y > ((alturaDaTela/1.35)-17) && posicaoMouse.y < ((alturaDaTela/1.35)+17)) //SCORE FUNCIONAR nas coordenadas do mouse
+          {
+            estado = Score;
+          }
 
-            if(posicaoMouse.y > ((alturaDaTela/1.467)-17) && posicaoMouse.y < ((alturaDaTela/1.467)+17)) //jogar nas coordenadas do mouse
-            {
-              estado = jogo;
-            }
-        }
-    }
- }
+          if(posicaoMouse.y > ((alturaDaTela/1.467)-17) && posicaoMouse.y < ((alturaDaTela/1.467)+17)) //jogar nas coordenadas do mouse
+          {
+            estado = jogo;
+          }
+          }
+      }
+    } 
+  }
 }
 
 int main(int argc, char **argv)
