@@ -1,34 +1,3 @@
-
-//LINK DO ENUNCIADO: https://github.com/fegemo/cefet-cg/blob/master/assignments/tp1-lander/README.md#trabalho-pr%C3%A1tico-1---lander
-//CEU TEMPORARIO https://extraterrestresmyblog.wordpress.com/ceu-noite-jpg/
-
-//COISAS A FAZER:
-//1.  Derrota quando pousar inclinado
-//2.  Tirar numeros magicos
-//3.  VITORIA/DERROTA NO ONE SWITCH
-//4. COMENTAR O CODIGO
-
-//EM ANDAMENTO:
-//1.  Arrumar razão aspecto de escrita na tela
-
-//OBJETIVOS CONCLUIDOS:
-//1.  Movimentação da Nave atraves de teclas WAD
-//2.  Textura temporáriada nave
-//3.  Tecla 'P' pausa o jogo
-//4.  Rotação da nave
-//5.  Tecla 'esc' para sair pede confirmação antes
-//6.  Fisica da nave
-//7.  Manter razão de aspecto
-//8.  'R' para reiniciar
-//9.  Vitoria/Derrota
-//10. local de pouso
-//11. Movimentação da nave via setinhas
-//12. Combustivel do motor
-//13. foguinho sai da turbina quando o motor principal é ligado
-//14. Menu
-//15. HUD
-//16. Pontuação salva em arquivo
-
 #include <SOIL/SOIL.h>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -42,31 +11,43 @@
 #include <texturas.h>
 #include <pontuacao.h>
 
-//COLOCAR NO LUGAR CERTO
-float transparencia = 1; // inicio
-float acrescimo = 0.01; //inicio
-float spritesheet = 0.2; // menu
-float min = 0;
-int estadoMenu = 10;
-// 10 = jogar
-/// 11 = score
-// 12 = controles
-//13 creditos
+//VARIAVEIS DE MENU
+int estadoMenu = jogar;
+//VARIAVEIS DE MENU
 
-// 14 = sair
 
+//ESTRUTURAS DO JOGO
 navinha nave;
 Mouse posicaoMouse;
+//ESTRUTURAS DO JOGO
 
+
+//VARIAVEIS DE TECLADO
 unsigned int tecla[256];
 unsigned int teclaEspec[256];
+//VARIAVEIS DE TECLADO
 
+
+//VARIÁVEL DE PONTUAÇÃO
 int melhoresPontuacoes[5];
+//VARIÁVEL DE PONTUAÇÃO
 
-float controleAngulo = -22.5;
-int controleMenu = 0;
-int oneSwitch = 1;
+int oneSwitch = TRUE;
+
+//CONTROLE DA NAVE ONE-SWITCH
+float controleAnguloNave = -22.5;
 float ang = 0.25;
+//CONTROLE DA NAVE ONE-SWITCH
+
+//ALPHA DO RGBA
+float transparencia = 1; // usado em inicio e jogo
+//ALPHA DO RGBA
+
+float acrescimo = 0.01;  // inicio
+float spritesheet = 0.2; // menu
+float min = 0;
+
+int controleMenu = 0;
 
 float spriteReiniciar = 0.5;
 float minReiniciar = 0;
@@ -75,9 +56,9 @@ int estadoReiniciar = 0;
 // 0 = reiniciar
 // 1 = voltar ao menu
 
-void resetaJogo() //Usa o preset da atualiza
+void resetaJogo() //Usa o preset da inicializa
 {
-  if(oneSwitch == 0)
+  if(oneSwitch == FALSE)
   {
     estado = jogo;
     xAleatorioBasePouso = rand()%1000;
@@ -93,7 +74,7 @@ void resetaJogo() //Usa o preset da atualiza
     nave.combustivel = 1000;
   }
 
-  if(oneSwitch == 1)
+  if(oneSwitch == TRUE)
   {
     estado = jogo;
     xAleatorioBasePouso = rand()%1000;
@@ -220,7 +201,7 @@ void desenhaDerrota()
 	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
 
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
 	    	// Começa a usar a textura que criamos
 	    glBindTexture(GL_TEXTURE_2D, texturaDerrota);
@@ -230,7 +211,7 @@ void desenhaDerrota()
 	    glDisable(GL_TEXTURE_2D);
     }
 
-    if(oneSwitch == 1)
+    if(oneSwitch == TRUE)
     {
     	// Começa a usar a textura que criamos
     glBindTexture(GL_TEXTURE_2D, texturaDerrotaOneSwitch);
@@ -253,16 +234,16 @@ void desenhaDerrota()
 
     glDisable(GL_TEXTURE_2D);
 
-    
-    }    
+
+    }
 }
 
 void desenhaPreJogo() //IMPORTANTE
 {
 	// Habilita o uso de texturas
-    glEnable(GL_TEXTURE_2D);    
+    glEnable(GL_TEXTURE_2D);
 
-    
+
     	// Começa a usar a textura que criamos
     glBindTexture(GL_TEXTURE_2D, texturaPreJogo);
 
@@ -282,8 +263,8 @@ void desenhaPreJogo() //IMPORTANTE
 
     glEnd();
 
-    glDisable(GL_TEXTURE_2D);    
-        
+    glDisable(GL_TEXTURE_2D);
+
 }
 
 void desenhaReset()
@@ -301,23 +282,27 @@ void desenhaReset()
 
 void desenhaVitoria()
 {
-  // Habilita o uso de texturas
+	int quadradoPontuacaoX = 350;
+	int quadradoPontuacaoYmin = -375;
+	int quadradoPontuacaoYmax = -150;
+
+  	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
 
     // Começa a usar a textura que criamos
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
     	glBindTexture(GL_TEXTURE_2D, texturaVitoria);
 
     	quadradoDoTamanhoDaTela();
 
-    	glDisable(GL_TEXTURE_2D);	
-    }    
+    	glDisable(GL_TEXTURE_2D);
+    }
 
     //ONE SWITCH
 
-    if(oneSwitch == 1) //ARRUMAR AQUIII
-    {
+    if(oneSwitch == TRUE)
+        {
     	glBindTexture(GL_TEXTURE_2D, texturaVitoriaOneSwitch);
 
         quadradoDoTamanhoDaTela();
@@ -329,18 +314,15 @@ void desenhaVitoria()
 
         // Começa a desenhar um polígono com os vértices especificados
         glBegin(GL_TRIANGLE_FAN);
-            glTexCoord2f(0, minReiniciar);  glVertex2f(0,0);
-            glTexCoord2f(1, minReiniciar);  glVertex2f(LARGURA_DO_MUNDO, 0);
+            glTexCoord2f(0, minReiniciar);      glVertex2f(0,0);
+            glTexCoord2f(1, minReiniciar);      glVertex2f(LARGURA_DO_MUNDO, 0);
             glTexCoord2f(1, spriteReiniciar);   glVertex2f(LARGURA_DO_MUNDO, ALTURA_DO_MUNDO);
             glTexCoord2f(0, spriteReiniciar);   glVertex2f(0, ALTURA_DO_MUNDO);
 
         glEnd();
 
         glDisable(GL_TEXTURE_2D);
-
     }
-
-
 
     //EXIBE PONTUAÇAO
     glColor4f(0,0,0,0.8);
@@ -357,7 +339,7 @@ void desenhaVitoria()
     glColor3f(1,0.1,0.1);
     //rgb(179, 57, 57)
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "PONTUACAO", (LARGURA_DO_MUNDO/2)-100, ALTURA_DO_MUNDO/2); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "PONTUACAO", (LARGURA_DO_MUNDO/2)-100, ALTURA_DO_MUNDO/2); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, nave.combustivel, (LARGURA_DO_MUNDO/2)-40, (ALTURA_DO_MUNDO/2)-70);
 
     glEnd();
@@ -366,36 +348,39 @@ void desenhaVitoria()
 
     glBegin(GL_TRIANGLE_FAN);
 
-      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-375);
-      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-375);
-      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-150);
-      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-150);
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); 
+      glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); //QUADRADO PRETO
+      glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax); //NA PONTUAÇAO
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax);
 
     glEnd();
 
     glColor3f(1,0.1,0.1);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // EXIBE PONTUAÇAO NA TELA DE VITORIA
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[0], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-190);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[1], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-240);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[2], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-290);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[3], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-340);
 }
 
 void desenhaScore()
 {
-  // Habilita o uso de texturas
+	int quadradoPontuacaoX = 350;
+	int quadradoPontuacaoYmin = -375;
+	int quadradoPontuacaoYmax = -150;
+
+  	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
 
     // Começa a usar a textura que criamos
-
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
         glBindTexture(GL_TEXTURE_2D, texturaScore);
     }
@@ -411,25 +396,25 @@ void desenhaScore()
 
     glBegin(GL_TRIANGLE_FAN);
 
-      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-375);
-      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-375);
-      glVertex2f((LARGURA_DO_MUNDO/2)+350, (ALTURA_DO_MUNDO/2)-150);
-      glVertex2f((LARGURA_DO_MUNDO/2)-350, (ALTURA_DO_MUNDO/2)-150);
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); 
+      glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); //QUADRADO PRETO
+      glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax); //NA PONTUAÇAO
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax);
 
     glEnd();
 
     glColor3f(1,0.1,0.1);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // EXIBE PONTUAÇAO NA TELA DE VITORIA
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[0], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-190);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[1], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-240);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[2], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-290);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); // velocidade em Y
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); 
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[3], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-340);
 
 }
@@ -463,7 +448,7 @@ void desenhaBasePouso()
 {
   int altura = 100;
   int largura = 100;
-
+  int alturaChao = 20;
 
 	glColor3f(1, 1, 1);
 
@@ -475,8 +460,8 @@ void desenhaBasePouso()
 
     // Começa a desenhar um polígono com os vértices especificados
     glBegin(GL_TRIANGLE_FAN);
-        glTexCoord2f(0,0);  glVertex2f(xAleatorioBasePouso, 20);
-        glTexCoord2f(1,0);  glVertex2f(xAleatorioBasePouso + largura, 20);
+        glTexCoord2f(0,0);  glVertex2f(xAleatorioBasePouso, alturaChao);
+        glTexCoord2f(1,0);  glVertex2f(xAleatorioBasePouso + largura, alturaChao);
         glTexCoord2f(1,1);  glVertex2f(xAleatorioBasePouso + largura, altura);
         glTexCoord2f(0,1);  glVertex2f(xAleatorioBasePouso, altura);
     glEnd();
@@ -487,7 +472,8 @@ void desenhaBasePouso()
 void desenhaNave()
 {
     glColor3f(1,1,1);
-   // glClear(GL_COLOR_BUFFER_BIT);
+
+    // glClear(GL_COLOR_BUFFER_BIT);
 	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
 
@@ -502,10 +488,10 @@ void desenhaNave()
 
     // Começa a desenhar um polígono com os vértices especificados
     glBegin(GL_TRIANGLE_FAN);
-        glTexCoord2f((0.5*nave.motor), 0);	glVertex2f(-LARGURA/2, -ALTURA/2);
-        glTexCoord2f((0.5+(0.5*nave.motor)), 0);	glVertex2f(LARGURA/2, -ALTURA/2);
-        glTexCoord2f((0.5+(0.5*nave.motor)), 1);	glVertex2f(LARGURA/2, ALTURA/2);
-        glTexCoord2f((0.5*nave.motor), 1);	glVertex2f(-LARGURA/2, ALTURA/2);
+        glTexCoord2f((0.5*nave.motor), 0);	        glVertex2f(-LARGURA/2, -ALTURA/2);
+        glTexCoord2f((0.5+(0.5*nave.motor)), 0);	glVertex2f(LARGURA/2,  -ALTURA/2);
+        glTexCoord2f((0.5+(0.5*nave.motor)), 1);	glVertex2f(LARGURA/2,   ALTURA/2);
+        glTexCoord2f((0.5*nave.motor), 1);	        glVertex2f(-LARGURA/2,  ALTURA/2);
 
     glEnd();
     glPopMatrix();
@@ -533,13 +519,13 @@ void desenhaMenu()
     glEnable(GL_TEXTURE_2D);
 
     // Começa a usar a textura que criamos
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
     	glBindTexture(GL_TEXTURE_2D, menu_sem_escrita);
     }
 
     else glBindTexture(GL_TEXTURE_2D, texturaMenuOneSwitch);
-    
+
 
     quadradoDoTamanhoDaTela();
 
@@ -564,6 +550,7 @@ void desenhaMenu()
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
+
 }
 
 void desenhaControles()
@@ -572,7 +559,7 @@ void desenhaControles()
     glEnable(GL_TEXTURE_2D);
 
     // Começa a usar a textura que criamos
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
         glBindTexture(GL_TEXTURE_2D, texturaControles);
     }
@@ -591,7 +578,7 @@ void desenhaCreditos()
     glEnable(GL_TEXTURE_2D);
 
     // Começa a usar a textura que criamos
-    if(oneSwitch == 0)
+    if(oneSwitch == FALSE)
     {
         glBindTexture(GL_TEXTURE_2D, texturaCreditos);
     }
@@ -627,11 +614,11 @@ void desenhaCena(void)
 
     else if(estado == jogo)
     {
-      desenhaFundoJogo();
+        desenhaFundoJogo();
     	desenhaHUD();
     	DesenhaChao();
-      desenhaBasePouso();
-      desenhaNave();
+        desenhaBasePouso();
+        desenhaNave();
     }
 
     else if(estado == pause) //NAO TEM NO ONE SWITCH
@@ -651,12 +638,12 @@ void desenhaCena(void)
 
     else if(estado == reset)
     {
-      desenhaReset();
+        desenhaReset();
     }
 
     else if(estado == vitoria)
     {
-      desenhaVitoria();
+        desenhaVitoria();
     }
 
     else if(estado == Score)
@@ -666,12 +653,12 @@ void desenhaCena(void)
 
     else if(estado == controles)
     {
-          desenhaControles();
+        desenhaControles();
     }
 
     else if(estado == creditos)
     {
-          desenhaCreditos();
+        desenhaCreditos();
     }
 
     // Diz ao OpenGL para colocar o que desenhamos na tela
@@ -680,7 +667,10 @@ void desenhaCena(void)
 
 void basePouso()
 {
-  if(nave.posicaoY < 55 && (nave.posicaoX >= xAleatorioBasePouso && nave.posicaoX<= xAleatorioBasePouso + 100)) //100 é a largura
+  int larguraBasePouso = 100;
+  int posicaoYFinalNave = 55;
+
+  if(nave.posicaoY < posicaoYFinalNave && (nave.posicaoX >= xAleatorioBasePouso && nave.posicaoX <= xAleatorioBasePouso + larguraBasePouso))
 	{
 			if(nave.velocidadeEmY < -1)
 			{
@@ -689,7 +679,7 @@ void basePouso()
 
 			else
 			{
-				nave.posicaoY = 55;
+				nave.posicaoY = posicaoYFinalNave;
 				nave.velocidadeEmY = 0;
 				nave.velocidadeEmX = 0;
 				nave.aceleracaoY = 0;
@@ -702,27 +692,34 @@ void basePouso()
         salvaPontuacao(melhoresPontuacoes);
 			}
 	}
-
 }
 
 void chao()
 {
-	if(nave.posicaoY < 45)
-	{
-		estado = Derrota;
-	}
+    if(nave.posicaoY < 45)
+    {
+    	estado = Derrota;
+    }
 }
 
 void limiteDoJogo()
 {
-  if(nave.posicaoX > LARGURA_DO_MUNDO || nave.posicaoX < 0 || nave.posicaoY > ALTURA_DO_MUNDO)
-    estado = Derrota;
+    if(nave.posicaoX > LARGURA_DO_MUNDO || nave.posicaoX < 0 || nave.posicaoY > ALTURA_DO_MUNDO)
+    {
+        estado = Derrota;
+    }
 }
 
 void atualiza()
 {
+  int teclaPressionada = 1;
+  int teclaNaoPressionada = 0;
+  float posicionaCameraTextura;
+
 	if(estado == pre) //DECIDE SE ONE SWITCH OU NAO
 	{
+		posicionaCameraTextura = 0.5;
+
 		controleReiniciar++;
 
     	if(controleReiniciar == 239)
@@ -730,111 +727,143 @@ void atualiza()
         	controleReiniciar = 0;
       	}
 
-      	if(controleReiniciar%80 == 0)
-      	{      		
-      		spriteReiniciar += 0.5;
-      		minReiniciar += 0.5;
+      	if(controleReiniciar % 80 == 0) //VARIACAO DE OPÇAO
+      	{
+      		spriteReiniciar += posicionaCameraTextura;
+      		minReiniciar    += posicionaCameraTextura;
       		estadoReiniciar++;
 
       		if(spriteReiniciar > 1)
       		{
-      			spriteReiniciar = 0.5;
+      			spriteReiniciar = posicionaCameraTextura;
       			minReiniciar = 0;
       			estadoReiniciar = 0;
       		}
       	}
-
 	}
 
-  if(oneSwitch == 1)
-  {
-    if(estado == menu)
+    if(oneSwitch == TRUE)
     {
-      controleMenu++;
+	    if(estado == menu)
+	    {
+	    	posicionaCameraTextura = 0.2;
 
-      if(controleMenu == 479)
-      {
-        controleMenu = 0;
-      }
+		      controleMenu++;
 
-      if(controleMenu%80==0)
-      {
-        spritesheet += 0.2; //CONTINUAR AQUI
-        min += 0.2;
-        estadoMenu ++;
+		      if(controleMenu == 479)
+		      {
+		         controleMenu = 0;
+		      }
 
-        if(spritesheet > 1)
-        {
-          spritesheet = 0.2;
-          min = 0;
-          estadoMenu = 10;
-        }
-      }
-    }
+		      if(controleMenu % 80 == 0) //VARIACAO DE OPÇAO
+		      {
+		        spritesheet += posicionaCameraTextura;
+		        min         += posicionaCameraTextura;
+		        estadoMenu ++;
 
-    if(estado == Derrota || estado == vitoria)
-    {
-    	controleReiniciar++;
+		        if(spritesheet > 1)
+		        {
+		          spritesheet = posicionaCameraTextura;
+		          min = 0;
+		          estadoMenu = jogar;
+		        }
+	    	  }
+    	}
 
-    	if(controleReiniciar == 239)
-      	{
-        	controleReiniciar = 0;
-      	}
+	    if(estado == Derrota || estado == vitoria)
+	    {
+	    	posicionaCameraTextura = 0.5;
 
-      	if(controleReiniciar%80 == 0)
-      	{      		
-      		spriteReiniciar += 0.5;
-      		minReiniciar += 0.5;
-      		estadoReiniciar++;
+	    	controleReiniciar++;
 
-      		if(spriteReiniciar > 1)
-      		{
-      			spriteReiniciar = 0.5;
-      			minReiniciar = 0;
-      			estadoReiniciar = 0;
-      		}
-      	}
-    }
-  }
+	    	if(controleReiniciar == 239)
+	      	{
+	        	controleReiniciar = 0;
+	      	}
 
-  if(estado == inicio || estado == jogo)
-  {
-      transparencia -= acrescimo;
+	      	if(controleReiniciar % 80 == 0) //VARIACAO DE OPÇAO
+	      	{
+	      		spriteReiniciar += posicionaCameraTextura;
+	      		minReiniciar    += posicionaCameraTextura;
+	      		estadoReiniciar++;
 
-      if(transparencia <= 0)
-      {
-        acrescimo = -0.01;
-      }
+	      		if(spriteReiniciar > 1)
+	      		{
+	      			spriteReiniciar = posicionaCameraTextura;
+	      			minReiniciar = 0;
+	      			estadoReiniciar = 0;
+	      		}
+	      	}
+	    }
 
-      if(transparencia > 1)
-      {
-        acrescimo = 0.01;
-      }
-  }
+	    if(estado == jogo) //CONTROLE AUTOMATICO DA ROTACAO DA NAVE
+	    {
+	      controleAnguloNave += ang;
 
-  if(oneSwitch == 1)
-  {
+	      if(controleAnguloNave == 22.5 ||controleAnguloNave == -22.5)
+	      {
+	        ang = ang*(-1);
+	      }
+
+	      nave.angulo = controleAnguloNave;
+	    
+
+		  if(tecla[32] == teclaPressionada) //CONTROLE DA NAVE
+		  {
+		        if(nave.combustivel > 0)
+		        {
+		          nave.motor = 1;
+		          nave.aceleracaoY = 0.03;
+		          nave.aceleracaoX = 0.03;
+		          nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
+		          nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
+		          nave.posicaoY += nave.velocidadeEmY;
+		          nave.posicaoX += nave.velocidadeEmX;
+		          nave.combustivel--;
+		        }
+		        else
+		        {
+		          nave.posicaoY += nave.velocidadeEmY;
+		          nave.posicaoX += nave.velocidadeEmX;
+		        }
+	      }
+
+	      if(tecla[32] == teclaNaoPressionada)
+	      {
+	      	nave.motor = 0;
+	       	nave.aceleracaoY = 0;
+	       	nave.aceleracaoX = 0;
+	      	nave.posicaoY += nave.velocidadeEmY;
+	       	nave.posicaoX += nave.velocidadeEmX;
+	      }
+	    }
+  	}
+
+    if(estado == inicio || estado == jogo) 		    //SPACEBAR PISCANDO NA TELA INICIAL
+    {												//ESTRELAS PISCANDO DURANTE O JOGO
+	   	float incrementoTransparencia = 0.01;
+
+	      transparencia -= acrescimo;
+
+	      if(transparencia <= 0)
+	      {
+	        acrescimo = -incrementoTransparencia;
+	      }
+
+	      if(transparencia > 1)
+	      {
+	        acrescimo = incrementoTransparencia;
+	      }
+    } 
+
     if(estado == jogo)
     {
-      controleAngulo += ang;
 
-      if(controleAngulo == 22.5 ||controleAngulo == -22.5)
-      {
-        ang = ang*(-1);
-      }
-
-      nave.angulo = controleAngulo;
-    }
-  }
-
-    if(estado == jogo)
-    {  
-      
       limiteDoJogo();
 
-        if(oneSwitch == 0)
+        if(oneSwitch == FALSE)
         {
-	        if(tecla['w']==0 && tecla['W']==0)
+	        if(tecla['w']== teclaNaoPressionada && tecla['W'] == teclaNaoPressionada)
 	        {
 	          nave.motor = 0;
 	          nave.aceleracaoY = 0;
@@ -843,13 +872,18 @@ void atualiza()
 	          nave.posicaoX += nave.velocidadeEmX;
 	        }
 
-	        if(tecla['a']==1 || tecla['A']==1)
-          	nave.angulo+=1;
+	        if(tecla['a'] == teclaPressionada || tecla['A'] == teclaPressionada)
+            {
+              nave.angulo += 1;
+            }
 
-	        if(tecla['d']==1 || tecla['D']==1)
-	          nave.angulo-=1;
 
-	        if(tecla['w']==1 || tecla['W']==1)
+	        if(tecla['d'] == teclaPressionada || tecla['D'] == teclaPressionada)
+            {
+              nave.angulo -= 1;
+            }
+
+	        if(tecla['w'] == teclaPressionada || tecla['W'] == teclaPressionada)
 	        {
 	            if(nave.combustivel > 0)
 	            {
@@ -862,48 +896,15 @@ void atualiza()
 	              nave.posicaoX += nave.velocidadeEmX;
 	              nave.combustivel--;
 	            }
+
 	            else
 	            {
 	              nave.posicaoY += nave.velocidadeEmY;
 	              nave.posicaoX += nave.velocidadeEmX;
 	            }
         	}
-
-
         }
-
-        if(oneSwitch == 1)
-        {
-        	if(tecla[32] == 1)
-	        {
-	            if(nave.combustivel > 0)
-	            {
-	              nave.motor = 1;
-	              nave.aceleracaoY = 0.03;
-	              nave.aceleracaoX = 0.03;
-	              nave.velocidadeEmY += nave.aceleracaoY * cos((nave.angulo * M_PI) / 180);
-	              nave.velocidadeEmX += nave.aceleracaoX * sin(-(nave.angulo * M_PI) / 180);
-	              nave.posicaoY += nave.velocidadeEmY;
-	              nave.posicaoX += nave.velocidadeEmX;
-	              nave.combustivel--;
-	            }
-	            else
-	            {
-	              nave.posicaoY += nave.velocidadeEmY;
-	              nave.posicaoX += nave.velocidadeEmX;
-	            }
-        	}
-
-        	if(tecla[32]==0)
-        	{
-        		nave.motor = 0;
-          		nave.aceleracaoY = 0;
-          		nave.aceleracaoX = 0;
-          		nave.posicaoY += nave.velocidadeEmY;
-          		nave.posicaoX += nave.velocidadeEmX;
-        	}
-        }
-
+        
         nave.velocidadeEmY += nave.gravidade;
 
         basePouso();
@@ -921,16 +922,16 @@ void atualiza()
 }
 
 // Inicia algumas variáveis de estado
-void inicializa(void) // OTIMIZAR 
+void inicializa(void)
 {
-	carregaTextura();
+  	carregaTextura();
 
-  srand(time(NULL));
+    srand(time(NULL));
 
-  xAleatorioBasePouso = rand()%1000;
+    xAleatorioBasePouso = rand()%1000;
 
       // cor para limpar a tela
-    glClearColor(1, 1, 1, 0);      // branco
+    glClearColor(0, 0, 0, 0); // Preto
   	estado = pre;
     nave.posicaoX = 200;
     nave.posicaoY = 1000;
@@ -942,13 +943,16 @@ void inicializa(void) // OTIMIZAR
     nave.angulo = 0;
     nave.motor = 0;
     nave.combustivel = 1000;
-    
 }
 
 // Callback de redimensionamento
 void redimensiona(int width, int height)
 {
-glMatrixMode(GL_PROJECTION);
+
+  larguraDaTela = width;
+  alturaDaTela = height;
+
+  glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, LARGURA_DO_MUNDO, 0, ALTURA_DO_MUNDO, -1, 1);
 
@@ -959,6 +963,7 @@ glMatrixMode(GL_PROJECTION);
         // vamos colocar barras verticais (acima e abaixo)
         float hViewport = width / razaoAspectoMundo;
         float yViewport = (height - hViewport)/2;
+
         glViewport(0, yViewport, width, hViewport);
     }
     // se a janela está mais larga (achatada) do que o mundo (16:9)...
@@ -967,6 +972,7 @@ glMatrixMode(GL_PROJECTION);
         float wViewport = ((float)height) * razaoAspectoMundo;
         float xViewport = (width - wViewport)/2;
         glViewport(xViewport, 0, wViewport, height);
+
     } else {
         glViewport(0, 0, width, height);
     }
@@ -978,7 +984,6 @@ glMatrixMode(GL_PROJECTION);
 // Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
-
   tecla[key] = 1;
 
   switch(key)
@@ -1029,28 +1034,28 @@ void teclado(unsigned char key, int x, int y)
     {
         if(estado == menu)
         {
-          if(estadoMenu == 10)
+          if(estadoMenu == jogar)
           {
             resetaJogo();
             estado = jogo;
           }
 
-          if(estadoMenu == 11)
+          if(estadoMenu == pontos)
           {
             estado = Score;
           }
 
-          if(estadoMenu == 12)
+          if(estadoMenu == Controles)
           {
             estado = controles;
           }
 
-          if(estadoMenu == 13)
+          if(estadoMenu == Creditos)
           {
               estado = creditos;
           }
 
-          if(estadoMenu == 14)
+          if(estadoMenu == Sair)
           {
             exit(0);
           }
@@ -1064,13 +1069,13 @@ void teclado(unsigned char key, int x, int y)
       	if(estado == pre)
       	{
       		if(estadoReiniciar == 0)
-             	{             		
-                  	oneSwitch = 1;
+             	{
+              	oneSwitch = TRUE;
              	}
 
              	if(estadoReiniciar == 1)
              	{
-             		oneSwitch = 0;
+             		oneSwitch = FALSE;
              	}
 
             estado = menu;
@@ -1083,42 +1088,42 @@ void teclado(unsigned char key, int x, int y)
             break;
         }
 
-        if(oneSwitch == 1)
+        if(oneSwitch == TRUE)
         {
             if(estado == menu)
             {
-               if(estadoMenu == 10)
+               if(estadoMenu == jogar)
                {
                   resetaJogo();
                   estado = jogo;
                }
 
-               if(estadoMenu == 11)
+               if(estadoMenu == pontos)
                {
                  estado = Score;
                  break;
                }
 
-               if(estadoMenu == 12)
+               if(estadoMenu == Controles)
                {
                   estado = controles;
                   break;
                }
 
-               if(estadoMenu == 13)
+               if(estadoMenu == Creditos)
                {
                     estado = creditos;
                     break;
                }
 
-               if(estadoMenu == 14)
+               if(estadoMenu == Sair)
                {
                   exit(0);
                }
              }
 
              if(estado == Derrota || estado == vitoria)
-             {             	
+             {
              	if(estadoReiniciar == 0)
              	{
              		resetaJogo();
@@ -1182,7 +1187,7 @@ void teclado(unsigned char key, int x, int y)
 
         if(estado == reset)
         {
-            estado = jogo;
+          estado = jogo;
         }
 
         if(estado == vitoria)
@@ -1220,40 +1225,42 @@ void tecladoUP(unsigned char key, int x, int y)
 
 void teclasEspeciais(int key, int x, int y)
 {
+  float posicionaCameraTextura = 0.2;
+
   switch (key)
   {
       case GLUT_KEY_UP: //CIMA
       {
-        if(estado == menu)
+        if(estado == menu) //MUDA A COR DA OPÇÃO ATUAL
         {
-            spritesheet -= 0.2; //CONTINUAR AQUI
-            min -= 0.2;
+            spritesheet -= posicionaCameraTextura; 
+            min         -= posicionaCameraTextura;
             estadoMenu --;
 
-            if(spritesheet < 0.2)
+            if(spritesheet < posicionaCameraTextura)
             {
               spritesheet = 1;
               min = 0.8;
-              estadoMenu = 14;
+              estadoMenu = Sair;
             }
         }
 
       }
       break;
 
-      case GLUT_KEY_DOWN: //abaixo
+      case GLUT_KEY_DOWN: //BAIXO
       {
         if(estado == menu)
         {
-            spritesheet += 0.2; //CONTINUAR AQUI
-            min += 0.2;
+            spritesheet += posicionaCameraTextura; 
+            min         += posicionaCameraTextura;
             estadoMenu ++;
 
             if(spritesheet > 1)
             {
-              spritesheet = 0.2;
+              spritesheet = posicionaCameraTextura;
               min = 0;
-              estadoMenu = 10;
+              estadoMenu = jogar;
 
             }
         }
@@ -1273,43 +1280,40 @@ void movimentoMouse(int x, int y)
 
     if(estado == menu)
     {
-        if(posicaoMouse.x > 722 && posicaoMouse.x < 969) //SPRITESHEET MENU
-        {
-            if(posicaoMouse.y > 889 && posicaoMouse.y < 939) //Sair
-            {
-              spritesheet = 1;
-              min = 0.8;
-              estadoMenu = 14;
-            }
+      if(posicaoMouse.y > ((alturaDaTela/1.093)-17) && posicaoMouse.y < ((alturaDaTela/1.093)+17)) //Sair
+      {
+        spritesheet = 1;
+        min = 0.8;
+        estadoMenu = Sair;
+      }
 
-            if(posicaoMouse.y > 830 && posicaoMouse.y < 880) //creditos
-            {
-              spritesheet = 0.8;
-              min = 0.6;
-              estadoMenu = 13;
-            }
+      if(posicaoMouse.y > ((alturaDaTela/1.17)-17)  && posicaoMouse.y < ((alturaDaTela/1.17)+17)) //creditos
+      {
+        spritesheet = 0.8;
+        min = 0.6;
+        estadoMenu = Creditos;
+      }
 
-            if(posicaoMouse.y > 771 && posicaoMouse.y < 823) //controles
-            {
-              spritesheet = 0.6;
-              min = 0.4;
-              estadoMenu = 12;
-            }
+      if(posicaoMouse.y > ((alturaDaTela/1.254)-17)  && posicaoMouse.y < ((alturaDaTela/1.254)+17)) //controles
+      {
+        spritesheet = 0.6;
+        min = 0.4;
+        estadoMenu = Controles;
+      }
 
-            if(posicaoMouse.y > 715 && posicaoMouse.y < 763) //score
-            {
-              spritesheet = 0.4;
-              min = 0.2;
-              estadoMenu = 11;
-            }
+      if(posicaoMouse.y > ((alturaDaTela/1.35)-17) && posicaoMouse.y < ((alturaDaTela/1.35)+17)) //score
+      {
+        spritesheet = 0.4;
+        min = 0.2;
+        estadoMenu = pontos;
+      }
 
-            if(posicaoMouse.y > 653 && posicaoMouse.y < 705) //jogar
-            {
-              spritesheet = 0.2;
-              min = 0;
-              estadoMenu = 10;
-            }
-        }
+      if(posicaoMouse.y > ((alturaDaTela/1.467)-17) && posicaoMouse.y < ((alturaDaTela/1.467)+17)) //jogar
+      {
+        spritesheet = 0.2;
+        min = 0;
+        estadoMenu = jogar;
+      }
     }
 }
 
@@ -1324,33 +1328,30 @@ void ClicMouse(int button, int state, int x, int y)
       {
           if (state == GLUT_DOWN) //OBS: TIRAR NUMEROS MAGICOS
           {
-              if(posicaoMouse.x > 722 && posicaoMouse.x < 969) //SPRITESHEET MENU
-              {
-                  if(posicaoMouse.y > 889 && posicaoMouse.y < 939) //Sair nas coordenadas do mouse
-                  {
-                      exit(0);
-                  }
+            if(posicaoMouse.y > ((alturaDaTela/1.093)-17) && posicaoMouse.y < ((alturaDaTela/1.093)+17)) //Sair nas coordenadas do mouse
+            {
+                exit(0);
+            }
 
-                  if(posicaoMouse.y > 830 && posicaoMouse.y < 880) //creditos nas coordenadas do mouse
-                  {
-                    estado = creditos;
-                  }
+            if(posicaoMouse.y > ((alturaDaTela/1.17)-17) && posicaoMouse.y < ((alturaDaTela/1.17)+17)) //creditos nas coordenadas do mouse
+            {
+              estado = creditos;
+            }
 
-                  if(posicaoMouse.y > 771 && posicaoMouse.y < 823) //controles nas coordenadas do mouse
-                  {
-                    estado = controles;
-                  }
+            if(posicaoMouse.y > ((alturaDaTela/1.254)-17) && ((alturaDaTela/1.254)+17)) //controles nas coordenadas do mouse
+            {
+              estado = controles;
+            }
 
-                  if(posicaoMouse.y > 715 && posicaoMouse.y < 763) //USAR QUANDO SCORE FUNCIONAR nas coordenadas do mouse
-                  {
-                    estado = Score;
-                  }
+            if(posicaoMouse.y > ((alturaDaTela/1.35)-17) && posicaoMouse.y < ((alturaDaTela/1.35)+17)) //SCORE FUNCIONAR nas coordenadas do mouse
+            {
+              estado = Score;
+            }
 
-                  if(posicaoMouse.y > 653 && posicaoMouse.y < 705) //jogar nas coordenadas do mouse
-                  {
-                    estado = jogo;
-                  }
-              }
+            if(posicaoMouse.y > ((alturaDaTela/1.467)-17) && posicaoMouse.y < ((alturaDaTela/1.467)+17)) //jogar nas coordenadas do mouse
+            {
+              estado = jogo;
+            }
         }
     }
  }

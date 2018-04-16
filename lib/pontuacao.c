@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void carregaPontuacao(int *score)
 {
 
@@ -11,20 +10,21 @@ void carregaPontuacao(int *score)
 
     if(filePontuacao == NULL)
     {
-        printf("Erro na abertura do arquivo!");
+        printf("Erro na abertura do arquivo!\n");
     }
-    
+    else
+    {
+        printf("Arquivo aberto com sucesso!\n");
+    }
 
     fscanf(filePontuacao, "%i %i %i %i %i", score, score+1, score+2, score+3, score+4);
 
     fclose(filePontuacao);
-
 }
 
 
 void salvaPontuacao(int *score)
 {
-
     int i, j, aux;
     //Ordenação do maior pro menor
     for(i=0; i<5; i++)
@@ -43,9 +43,10 @@ void salvaPontuacao(int *score)
 
 
     FILE *filePontuacao = fopen("pontuacoes.txt", "w");
+    
     if(filePontuacao == NULL)
     {
-        printf("Erro na abertura do arquivo!");
+        printf("Erro na abertura do arquivo!\n");
         exit(0);
     }
 

@@ -1,6 +1,7 @@
 #ifndef TEXTURAS_H
 #define TEXTURAS_H
 
+    //TEXTURAS NORMAL GAME
     int texturaNave;
     int texturaPause;
     int texturaInicio;
@@ -18,7 +19,7 @@
     int texturaCreditos;
     int texturaScore;
 
-    //ONE SWITCH
+    //TEXTURAS ONE SWITCH
     int texturaScoreOneSwitch;
     int texturaCreditosOneSwitch;
     int texturaControlesOneSwitch;

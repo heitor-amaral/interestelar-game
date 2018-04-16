@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-
     #define LARGURA_DO_MUNDO 1200
     #define ALTURA_DO_MUNDO 1200
 
@@ -25,6 +24,21 @@
     int xAleatorioBasePouso; //Posição aleatoria da base de pouso
     //VARIAVEIS DE ESTADO
 
+
+    //VARIAVEIS DE MENU
+    #define jogar 10
+    #define pontos 11
+    #define Controles 12
+    #define Creditos 13
+    #define Sair 14
+    //VARIAVEIS DE MENU
+
+    #define FALSE 0
+    #define TRUE 1
+
+
+    int larguraDaTela;
+    int alturaDaTela;
 
     //ESTRUTURA DA NAVE
     typedef struct navinha
