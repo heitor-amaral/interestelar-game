@@ -11,6 +11,10 @@
 #include <texturas.h>
 #include <pontuacao.h>
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_audio.h>
+#include <SDL/SDL_mixer.h>
+
 //VARIAVEIS DE MENU
 int estadoMenu = jogar;
 //VARIAVEIS DE MENU
@@ -27,10 +31,9 @@ unsigned int tecla[256];
 unsigned int teclaEspec[256];
 //VARIAVEIS DE TECLADO
 
-
 //VARIÁVEL DE PONTUAÇÃO
 int melhoresPontuacoes[5];
-//VARIÁVEL DE PONTUAÇÃO
+//VARIÁVEL DE PONTUAÇÃO  ￼
 
 int oneSwitch = TRUE;
 
@@ -54,7 +57,27 @@ float minReiniciar = 0;
 int controleReiniciar = 0;
 int estadoReiniciar = 0;
 // 0 = reiniciar
-// 1 = voltar ao menu
+// 1 = voltar ao menu  ￼
+
+int volume_musica=100;
+Mix_Music *musicMenu=NULL;
+
+//Musica de fundo do jogo
+void iniciar_musica(char  *music){
+	if(!Mix_PlayingMusic()){
+		Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,1024);
+		atexit(Mix_LoadMUS(music));
+		musicMenu=Mix_LoadMUS(music);
+		Mix_VolumeMusic(volume_musica);
+		Mix_PlayMusic(musicMenu,-1);
+	}
+}
+void parar_musica(){
+	if(Mix_PlayingMusic()){
+		Mix_FadeOutMusic(1000);
+	}
+}
+//Musica de fundo do jogo
 
 void resetaJogo() //Usa o preset da inicializa
 {
@@ -71,12 +94,14 @@ void resetaJogo() //Usa o preset da inicializa
     nave.aceleracaoY = 0;
     nave.angulo = 0;
     nave.motor = 0;
+    
     nave.combustivel = 1000;
   }
 
   if(oneSwitch == TRUE)
   {
     estado = jogo;
+
     xAleatorioBasePouso = rand()%1000;
     nave.posicaoX = 200;
     nave.posicaoY = 1000;
@@ -93,6 +118,7 @@ void resetaJogo() //Usa o preset da inicializa
 
 void desenhaHUD()
 {
+
 	glColor3f(1, 1, 1);
     escreveTexto(GLUT_BITMAP_HELVETICA_18, "VELOCIDADE EM X", 700, 1000); //velocidade em X
     escreveNumero(GLUT_BITMAP_HELVETICA_18, nave.velocidadeEmX, 1000, 1000);
@@ -117,6 +143,7 @@ void desenhaHUD()
 }
 
 void quadradoDoTamanhoDaTela()
+
 {
     // Começa a usar a cor verde
     glColor3f(1, 1, 1);
@@ -141,7 +168,7 @@ void quadradoDoTamanhoDaTelaComOpacidade()
         glTexCoord2f(1, 0);	glVertex2f(LARGURA_DO_MUNDO, 0);
         glTexCoord2f(1, 1);	glVertex2f(LARGURA_DO_MUNDO, ALTURA_DO_MUNDO);
         glTexCoord2f(0, 1);	glVertex2f(0, ALTURA_DO_MUNDO);
-
+        
     glEnd();
 }
 
@@ -197,6 +224,7 @@ void desenhaSair()
 }
 
 void desenhaDerrota()
+
 {
 	// Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
@@ -339,7 +367,7 @@ void desenhaVitoria()
     glColor3f(1,0.1,0.1);
     //rgb(179, 57, 57)
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "PONTUACAO", (LARGURA_DO_MUNDO/2)-100, ALTURA_DO_MUNDO/2); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "PONTUACAO", (LARGURA_DO_MUNDO/2)-100, ALTURA_DO_MUNDO/2);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, nave.combustivel, (LARGURA_DO_MUNDO/2)-40, (ALTURA_DO_MUNDO/2)-70);
 
     glEnd();
@@ -348,7 +376,7 @@ void desenhaVitoria()
 
     glBegin(GL_TRIANGLE_FAN);
 
-      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); 
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin);
       glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); //QUADRADO PRETO
       glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax); //NA PONTUAÇAO
       glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax);
@@ -360,13 +388,13 @@ void desenhaVitoria()
     escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // EXIBE PONTUAÇAO NA TELA DE VITORIA
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[0], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-190);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[1], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-240);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[2], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-290);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[3], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-340);
 }
 
@@ -396,7 +424,7 @@ void desenhaScore()
 
     glBegin(GL_TRIANGLE_FAN);
 
-      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); 
+      glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin);
       glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmin); //QUADRADO PRETO
       glVertex2f((LARGURA_DO_MUNDO/2) + quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax); //NA PONTUAÇAO
       glVertex2f((LARGURA_DO_MUNDO/2) - quadradoPontuacaoX, (ALTURA_DO_MUNDO/2) + quadradoPontuacaoYmax);
@@ -408,13 +436,13 @@ void desenhaScore()
     escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "1 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-190); // EXIBE PONTUAÇAO NA TELA DE VITORIA
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[0], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-190);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "2 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-240);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[1], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-240);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "3 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-290);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[2], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-290);
 
-    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340); 
+    escreveTexto(GLUT_BITMAP_TIMES_ROMAN_24, "4 -", (LARGURA_DO_MUNDO/2)-310, (ALTURA_DO_MUNDO/2)-340);
     escreveNumero(GLUT_BITMAP_TIMES_ROMAN_24, melhoresPontuacoes[3], (LARGURA_DO_MUNDO/2)-250, (ALTURA_DO_MUNDO/2)-340);
 
 }
@@ -806,7 +834,7 @@ void atualiza()
 	      }
 
 	      nave.angulo = controleAnguloNave;
-	    
+
 
 		  if(tecla[32] == teclaPressionada) //CONTROLE DA NAVE
 		  {
@@ -854,7 +882,7 @@ void atualiza()
 	      {
 	        acrescimo = incrementoTransparencia;
 	      }
-    } 
+    }
 
     if(estado == jogo)
     {
@@ -904,7 +932,7 @@ void atualiza()
 	            }
         	}
         }
-        
+
         nave.velocidadeEmY += nave.gravidade;
 
         basePouso();
@@ -924,6 +952,8 @@ void atualiza()
 // Inicia algumas variáveis de estado
 void inicializa(void)
 {
+  iniciar_musica("Songs/Heliosphere.mp3");
+
   	carregaTextura();
 
     srand(time(NULL));
@@ -951,7 +981,7 @@ void redimensiona(int width, int height)
 
   larguraDaTela = width;
   alturaDaTela = height;
-  
+
   glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, LARGURA_DO_MUNDO, 0, ALTURA_DO_MUNDO, -1, 1);
@@ -1056,6 +1086,7 @@ void teclado(unsigned char key, int x, int y)
 
           if(estadoMenu == Sair)
           {
+            parar_musica();
             exit(0);
           }
         }
@@ -1117,6 +1148,7 @@ void teclado(unsigned char key, int x, int y)
 
                if(estadoMenu == Sair)
                {
+                 parar_musica();
                   exit(0);
                }
              }
@@ -1232,7 +1264,7 @@ void teclasEspeciais(int key, int x, int y)
       {
         if(estado == menu) //MUDA A COR DA OPÇÃO ATUAL
         {
-            spritesheet -= posicionaCameraTextura; 
+            spritesheet -= posicionaCameraTextura;
             min         -= posicionaCameraTextura;
             estadoMenu --;
 
@@ -1251,7 +1283,7 @@ void teclasEspeciais(int key, int x, int y)
       {
         if(estado == menu)
         {
-            spritesheet += posicionaCameraTextura; 
+            spritesheet += posicionaCameraTextura;
             min         += posicionaCameraTextura;
             estadoMenu ++;
 
@@ -1327,6 +1359,7 @@ void ClicMouse(int button, int state, int x, int y)
   if(oneSwitch == FALSE)
   {
     if(estado == menu)
+    
     {
       if (button == GLUT_LEFT_BUTTON)
         {
@@ -1355,10 +1388,11 @@ void ClicMouse(int button, int state, int x, int y)
           if(posicaoMouse.y > ((alturaDaTela/1.467)-17) && posicaoMouse.y < ((alturaDaTela/1.467)+17)) //jogar nas coordenadas do mouse
           {
             estado = jogo;
+            resetaJogo();
           }
           }
       }
-    } 
+    }
   }
 }
 

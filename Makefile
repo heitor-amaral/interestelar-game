@@ -1,4 +1,4 @@
-OPCOES_COMPILADOR=-I./lib -lglut -lGLU -lSOIL -lGLEW -lGL -lm
+OPCOES_COMPILADOR=-I./lib -lglut -lGLU -lSOIL -lGLEW -lSDL_mixer -lGL -lm -w
 LIB=./lib/
 SRC=./src/
 TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o $(LIB)texturas.o $(LIB)pontuacao.o
@@ -19,7 +19,7 @@ all: $(TODOS_ARQUIVOS_OBJ)
 run: all
 	@echo "Inciando.."
 	@./start
-	
+
 clean:
 	@echo "Limpando arquivos.."
 	@rm -f start
